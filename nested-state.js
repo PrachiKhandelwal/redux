@@ -1,5 +1,7 @@
 const redux = require("redux");
 
+const { produce } = require("immer");
+
 const createStore = redux.createStore;
 
 const bindActionCreators = redux.bindActionCreators;
@@ -25,10 +27,14 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case STREET_UPDATED:
-            return {
-                ...state,
-                address: { ...state.address, street: action.payload },
-            };
+            // return {
+            //     ...state,
+            //     address: { ...state.address, street: action.payload },
+            // };
+            return produce(state, (draft) => {
+                console.log(draft);
+                draft.address.street = action.payload;
+            });
         default:
             return state;
     }
@@ -40,7 +46,7 @@ const unsubscribe = store.subscribe(() => {
     console.log(store.getState());
 });
 
-const actions=bindActionCreators({updateStreet},store.dispatch);
+const actions = bindActionCreators({ updateStreet }, store.dispatch);
 
 actions.updateStreet("street 9");
 unsubscribe();
