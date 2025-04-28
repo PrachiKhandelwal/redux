@@ -1,5 +1,11 @@
 const redux = require("redux");
 
+const {createLogger} = require("redux-logger");
+
+const logger = createLogger();
+
+const applyMiddleware = redux.applyMiddleware;
+
 const createStore = redux.createStore;
 
 const bindActionCreators = redux.bindActionCreators;
@@ -87,7 +93,7 @@ const rootReducer = combineReducers({
     cake: cakeReducer,
     icecream: icecreamReducer,
 });
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 // console.log(store.getState());
 
