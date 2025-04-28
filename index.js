@@ -4,6 +4,8 @@ const createStore = redux.createStore;
 
 const bindActionCreators = redux.bindActionCreators;
 
+const combineReducers = redux.combineReducers;
+
 const CAKE_ORDERED = "CAKE_ORDERED";
 
 const CAKE_RESTOCKED = "CAKE_RESTOCKED";
@@ -14,7 +16,7 @@ const ICECREAM_RESTOCKED = "ICECREAM_RESTOCKED";
 
 //defining action creator
 
-function orderCake(qty=1) {
+function orderCake(qty = 1) {
     //action object
     return {
         type: CAKE_ORDERED,
@@ -24,38 +26,48 @@ function orderCake(qty=1) {
 
 //reducer: (prevState, action) => newState
 
-function restockCake(qty=1) {
+function restockCake(qty = 1) {
     return {
         type: CAKE_RESTOCKED,
         payload: qty,
     };
 }
 
-function orderIcecream(qty=1) {
+function orderIcecream(qty = 1) {
     return {
         type: ICECREAM_ORDERED,
         payload: qty,
     };
 }
 
-function restockIcecream(qty=1) {
+function restockIcecream(qty = 1) {
     return {
         type: ICECREAM_RESTOCKED,
         payload: qty,
     };
 }
 
-const initialState = {
+const initialCakesState = {
     numOfCakes: 10,
+};
+
+const initialIcecreamState = {
     numOfIcecreams: 10,
 };
 
-const reducer = (state = initialState, action) => {
+const cakeReducer = (state = initialCakesState, action) => {
     switch (action.type) {
         case CAKE_ORDERED:
             return { ...state, numOfCakes: state.numOfCakes - action.payload };
         case CAKE_RESTOCKED:
             return { ...state, numOfCakes: state.numOfCakes + action.payload };
+        default:
+            return state;
+    }
+};
+
+const icecreamReducer = (state = initialIcecreamState, action) => {
+    switch (action.type) {
         case ICECREAM_ORDERED:
             return {
                 ...state,
@@ -71,7 +83,11 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-const store = createStore(reducer);
+const rootReducer = combineReducers({
+    cake: cakeReducer,
+    icecream: icecreamReducer,
+});
+const store = createStore(rootReducer);
 
 // console.log(store.getState());
 
